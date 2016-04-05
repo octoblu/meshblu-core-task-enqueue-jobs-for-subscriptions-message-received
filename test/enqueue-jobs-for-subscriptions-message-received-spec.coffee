@@ -85,6 +85,7 @@ describe 'EnqueueJobsForSubscriptionsMessageReceived', ->
         it 'should enqueue a job to deliver the message', (done) ->
           @jobManager.getRequest ['request'], (error, request) =>
             return done error if error?
+            delete request?.metadata?.responseId
             expect(request).to.deep.equal {
               metadata:
                 jobType: 'DeliverSubscriptionMessageReceived'
@@ -132,6 +133,7 @@ describe 'EnqueueJobsForSubscriptionsMessageReceived', ->
         it 'should enqueue a job to deliver the message with the hop prepended', (done) ->
           @jobManager.getRequest ['request'], (error, request) =>
             return done error if error?
+            delete request?.metadata?.responseId
             expect(request).to.deep.equal {
               metadata:
                 jobType: 'DeliverSubscriptionMessageReceived'
