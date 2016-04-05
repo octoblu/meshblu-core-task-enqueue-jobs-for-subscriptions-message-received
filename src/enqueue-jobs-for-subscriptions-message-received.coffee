@@ -16,7 +16,10 @@ class EnqueueJobsForSubscriptionsMessageReceived
     callback null, response
 
   do: (request, callback) =>
-    {fromUuid} = request.metadata
+    {fromUuid, toUuid, messageRoute} = request.metadata
+    if _.some(messageRoute, {toUuid: toUuid, fromUuid: fromUuid, type: 'message.received'})
+      return @_doCallback request, 204, callback
+
     @subscriptionManager.emitterListForType {emitterUuid: fromUuid, type: 'message.received'}, (error, subscriptions) =>
       return callback error if error?
       return @_doCallback request, 204, callback if _.isEmpty subscriptions

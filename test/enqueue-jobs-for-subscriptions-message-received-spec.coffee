@@ -51,7 +51,7 @@ describe 'EnqueueJobsForSubscriptionsMessageReceived', ->
 
           expect(@response).to.deep.equal expectedResponse
 
-    context 'when there are one subscriptions', ->
+    context 'when there is one subscription', ->
       beforeEach (done) ->
         record =
           type: 'message.received'
@@ -150,4 +150,36 @@ describe 'EnqueueJobsForSubscriptionsMessageReceived', ->
                 ]
               rawData: '{"original":"message"}'
             }
+            done()
+
+      context 'when given a message with a hop in the messageRoute equal to this one', ->
+        beforeEach (done) ->
+          request =
+            metadata:
+              responseId: 'its-electric'
+              fromUuid: 'emitter-uuid'
+              toUuid: 'original-uuid'
+              options: {}
+              messageRoute: [{
+                fromUuid: 'emitter-uuid'
+                toUuid: 'original-uuid'
+                type: 'message.received'
+              }]
+            rawData: '{"original":"message"}'
+
+          @sut.do request, (error, @response) => done error
+
+        it 'should return a 204', ->
+          expectedResponse =
+            metadata:
+              responseId: 'its-electric'
+              code: 204
+              status: 'No Content'
+
+          expect(@response).to.deep.equal expectedResponse
+
+        it 'should not enqueue a job', (done) ->
+          @jobManager.getRequest ['request'], (error, request) =>
+            return done error if error?
+            expect(request).not.to.exist
             done()
