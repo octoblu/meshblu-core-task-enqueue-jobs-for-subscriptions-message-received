@@ -20,7 +20,7 @@ class EnqueueJobsForSubscriptionsMessageReceived
     if _.some(messageRoute, {toUuid: toUuid, fromUuid: fromUuid, type: 'message.received'})
       return @_doCallback request, 204, callback
 
-    @subscriptionManager.emitterListForType {emitterUuid: fromUuid, type: 'message.received'}, (error, subscriptions) =>
+    @subscriptionManager.emitterListForType {emitterUuid: toUuid, type: 'message.received'}, (error, subscriptions) =>
       return callback error if error?
       return @_doCallback request, 204, callback if _.isEmpty subscriptions
 
@@ -33,8 +33,8 @@ class EnqueueJobsForSubscriptionsMessageReceived
 
   _buildRequest: ({request, subscription}) =>
     hop  =
-      fromUuid: subscription.emitterUuid
-      toUuid: subscription.subscriberUuid
+      fromUuid: request.metadata.fromUuid
+      toUuid: request.metadata.toUuid
       type: 'message.received'
 
     messageRoute = _.compact [hop].concat request.metadata.messageRoute
@@ -43,7 +43,7 @@ class EnqueueJobsForSubscriptionsMessageReceived
       metadata:
         jobType: 'DeliverSubscriptionMessageReceived'
         auth:
-          uuid: subscription.emitterUuid
+          uuid: subscription.subscriberUuid
         fromUuid: subscription.emitterUuid
         toUuid: subscription.subscriberUuid
         messageRoute: messageRoute

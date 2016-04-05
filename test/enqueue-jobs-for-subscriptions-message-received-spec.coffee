@@ -36,7 +36,8 @@ describe 'EnqueueJobsForSubscriptionsMessageReceived', ->
           request =
             metadata:
               responseId: 'its-electric'
-              uuid: 'electric-eels'
+              fromUuid: 'emitter-uuid'
+              toUuid: 'subscriber-uuid'
               options: {}
             rawData: '{}'
 
@@ -55,8 +56,8 @@ describe 'EnqueueJobsForSubscriptionsMessageReceived', ->
       beforeEach (done) ->
         record =
           type: 'message.received'
-          emitterUuid: 'emitter-uuid'
-          subscriberUuid: 'subscriber-uuid'
+          emitterUuid: 'subscriber-uuid'
+          subscriberUuid: 'some-other-uuid'
 
         @datastore.insert record, done
 
@@ -66,6 +67,7 @@ describe 'EnqueueJobsForSubscriptionsMessageReceived', ->
             metadata:
               responseId: 'its-electric'
               fromUuid: 'emitter-uuid'
+              toUuid: 'subscriber-uuid'
               options: {}
             rawData: '{"original":"message"}'
 
@@ -87,9 +89,9 @@ describe 'EnqueueJobsForSubscriptionsMessageReceived', ->
               metadata:
                 jobType: 'DeliverSubscriptionMessageReceived'
                 auth:
-                  uuid: 'emitter-uuid'
-                fromUuid: 'emitter-uuid'
-                toUuid: 'subscriber-uuid'
+                  uuid: 'some-other-uuid'
+                fromUuid: 'subscriber-uuid'
+                toUuid: 'some-other-uuid'
                 messageRoute: [
                  {
                    fromUuid: "emitter-uuid"
@@ -107,6 +109,7 @@ describe 'EnqueueJobsForSubscriptionsMessageReceived', ->
             metadata:
               responseId: 'its-electric'
               fromUuid: 'emitter-uuid'
+              toUuid: 'subscriber-uuid'
               options: {}
               messageRoute: [{
                 fromUuid: 'original-uuid'
@@ -133,9 +136,9 @@ describe 'EnqueueJobsForSubscriptionsMessageReceived', ->
               metadata:
                 jobType: 'DeliverSubscriptionMessageReceived'
                 auth:
-                  uuid: 'emitter-uuid'
-                fromUuid: 'emitter-uuid'
-                toUuid: 'subscriber-uuid'
+                  uuid: 'some-other-uuid'
+                fromUuid: 'subscriber-uuid'
+                toUuid: 'some-other-uuid'
                 messageRoute: [
                   {
                     fromUuid: "emitter-uuid"
