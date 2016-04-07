@@ -95,8 +95,8 @@ describe 'EnqueueJobsForSubscriptionsMessageReceived', ->
                 toUuid: 'some-other-uuid'
                 route: [
                  {
-                   fromUuid: "emitter-uuid"
-                   toUuid: "subscriber-uuid"
+                   from: "emitter-uuid"
+                   to: "subscriber-uuid"
                    type: "message.received"
                  }
                ]
@@ -113,8 +113,8 @@ describe 'EnqueueJobsForSubscriptionsMessageReceived', ->
               toUuid: 'subscriber-uuid'
               options: {}
               route: [{
-                fromUuid: 'original-uuid'
-                toUuid: 'emitter-uuid'
+                from: 'original-uuid'
+                to: 'emitter-uuid'
                 type: 'message.sent'
               }]
             rawData: '{"original":"message"}'
@@ -143,13 +143,13 @@ describe 'EnqueueJobsForSubscriptionsMessageReceived', ->
                 toUuid: 'some-other-uuid'
                 route: [
                   {
-                    fromUuid: "emitter-uuid"
-                    toUuid: "subscriber-uuid"
+                    from: "emitter-uuid"
+                    to: "subscriber-uuid"
                     type: "message.received"
                   },
                   {
-                    fromUuid: 'original-uuid'
-                    toUuid: 'emitter-uuid'
+                    from: 'original-uuid'
+                    to: 'emitter-uuid'
                     type: 'message.sent'
                   }
                 ]
@@ -166,8 +166,8 @@ describe 'EnqueueJobsForSubscriptionsMessageReceived', ->
               toUuid: 'original-uuid'
               options: {}
               route: [{
-                fromUuid: 'emitter-uuid'
-                toUuid: 'original-uuid'
+                from: 'emitter-uuid'
+                to: 'original-uuid'
                 type: 'message.received'
               }]
             rawData: '{"original":"message"}'
