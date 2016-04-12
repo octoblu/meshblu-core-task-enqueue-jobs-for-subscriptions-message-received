@@ -130,7 +130,7 @@ describe 'EnqueueJobsForSubscriptionsMessageReceived', ->
 
           expect(@response).to.deep.equal expectedResponse
 
-        it 'should enqueue a job to deliver the message with the hop prepended', (done) ->
+        it 'should enqueue a job to deliver the message with the hop appended', (done) ->
           @jobManager.getRequest ['request'], (error, request) =>
             return done error if error?
             delete request?.metadata?.responseId
@@ -143,14 +143,14 @@ describe 'EnqueueJobsForSubscriptionsMessageReceived', ->
                 toUuid: 'some-other-uuid'
                 route: [
                   {
-                    from: "emitter-uuid"
-                    to: "subscriber-uuid"
-                    type: "message.received"
-                  },
-                  {
                     from: 'original-uuid'
                     to: 'emitter-uuid'
                     type: 'message.sent'
+                  }
+                  {
+                    from: "emitter-uuid"
+                    to: "subscriber-uuid"
+                    type: "message.received"
                   }
                 ]
               rawData: '{"original":"message"}'
